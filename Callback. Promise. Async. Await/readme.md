@@ -44,4 +44,40 @@ result
   });
 ```
 Когда passexam равен true, промис успешно завершится через 5 секунд посредством вызова функции resolve(). А так как промис завершился успешно, то будет вызван метод then()  
-Если значение константы passexam поменять на false, то промис завершится с ошибкой через 5 секунд с помощью вызова функции reject(). А так как в этом случае промис завершился с ошибкой, то, следовательно, будет вызван catch().  
+Если значение константы passexam поменять на false, то промис завершится с ошибкой через 5 секунд с помощью вызова функции reject(). А так как в этом случае промис завершился с ошибкой, то, следовательно, будет вызван catch().    
+
+Пример 
+```
+div><button id="run">Новая попытка</button></div>
+<div id="result"></div>
+
+<script>
+  let isProcess = false;
+  elResult = document.querySelector('#result');
+
+  document.querySelector('#run').onclick = () => {
+    if (isProcess) {
+      elResult.textContent = 'Подождите! Задача ещё выполняется!';
+      return;
+    }
+    isProcess = true;
+    elResult.textContent = 'Задача в процессе...';
+    const promise = new Promise((resolve, reject) => {
+      setTimeout(() => {
+        const mark = Math.floor(Math.random() * 4) + 2;
+        mark > 3 ? resolve(mark) : reject(mark);
+      }, 5000);
+    });
+    promise
+      .then(value => {
+        elResult.textContent = `Ура! Вы сдали экзамен на ${value}! Папа, как и обещал дал вам 100$.`;
+      })
+      .catch(value => {
+        elResult.textContent = `Увы, вы получили оценку ${value}! Папа не дал вам 100$`;
+      })
+      .finally(() => {
+        isProcess = false;
+      });
+  }
+</script>
+```
